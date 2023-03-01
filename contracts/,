@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.7;
+
+import "./IMisc.sol";
+import "./Layers.sol";
+
+library Settings {
+  struct SettingToMakeATransfer {
+    uint256 amountMin;
+    uint256 amountMax;
+
+    uint256 numLayers;
+    mapping (uint256 => Layers.Layer) layers;
+  }
+
+
+  function setAmounts(
+    SettingToMakeATransfer storage self,
+    uint256 _amountMin,
+    uint256 _amountMax
+  ) internal {
+    self.amountMin = _amountMin;
+    self.amountMax = _amountMax;
+  }
+
+  function addLayer(
+    SettingToMakeATransfer storage self,
+    IMisc.LayerCallbackData memory layerCallbackData
+  ) internal returns (Layers.Layer storage) {
+    Layers.Layer storage layer = self.layers[self.numLayers];
+
+    self.numLayers++;
+
+    return layer;
+  }
+}
